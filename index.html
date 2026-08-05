@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Calculadora de Sensación Térmica</title>
+
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+
+  <body>
+    <main class="contenedor">
+      <header class="cabecera">
+        <div class="tituloContainer">
+          <img
+            class="imgTitulo"
+            src="https://cdn.meteocons.com/3.0.0-next.10/svg/fill/thermometer-celsius.svg"
+          />
+          <!-- <h1>🌡️ Sensación Térmica</h1> -->
+          <h1>Sensación Térmica</h1>
+        </div>
+
+        <!-- <h1>
+          <img
+            src="https://cdn.meteocons.com/3.0.0-next.10/svg/fill/thermometer-celsius.svg"
+          />
+          Sensación Térmica
+        </h1> -->
+        <p>
+          Calculá la sensación térmica teniendo en cuenta temperatura y
+          velocidad del viento.
+        </p>
+      </header>
+
+      <!-- RESULTADO -->
+
+      <section class="resultado">
+        <span class="resultado-titulo"> Sensación térmica </span>
+
+        <div id="sensacionTermica" class="temperatura">-- °C</div>
+
+        <div id="descripcion" class="descripcion">
+          Ingresá los datos para comenzar
+        </div>
+      </section>
+
+      <!-- DATOS -->
+
+      <section class="tarjeta">
+        <h2>Datos meteorológicos</h2>
+
+        <div class="formulario">
+          <div class="campo">
+            <label for="temperatura"> Temperatura </label>
+
+            <div class="input-unidad">
+              <input
+                type="number"
+                id="temperatura"
+                step="0.1"
+                placeholder="Ej: -5"
+              />
+
+              <span>°C</span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="viento"> Velocidad del viento </label>
+
+            <div class="input-unidad">
+              <input
+                type="number"
+                id="viento"
+                step="0.1"
+                min="0"
+                placeholder="Ej: 30"
+              />
+
+              <span>km/h</span>
+            </div>
+          </div>
+        </div>
+
+        <button id="btnCalcular" class="btn principal">Calcular</button>
+      </section>
+
+      <!-- DATOS ACTUALES -->
+      <div class="tarjetaContainer">
+        <section class="tarjeta actual" id="tarjetaActual">
+          <div class="titulo-seccion">
+            <div>
+              <h2>Condiciones actuales</h2>
+
+              <p id="ubicacion">Ubicación no determinada</p>
+            </div>
+
+            <span id="estadoConexion" class="estado"> ● </span>
+          </div>
+
+          <div class="datos-actuales">
+            <div class="dato">
+              <!-- <span class="icono" id="iconoActual">🌡️</span> -->
+              <img src="images/thermometer-sun.svg" class="imgTermo" />
+
+              <div>
+                <span>Temperatura</span>
+                <strong id="tempActual"> -- °C </strong>
+              </div>
+            </div>
+
+            <div class="dato">
+              <!-- <span class="icono">💨</span> -->
+              <!-- <img src="images/wind.svg" class="imgWind" /> -->
+              <canvas id="dotlottie-canvas-wind" class="imgWind"> </canvas>
+
+              <div>
+                <span>Viento</span>
+                <strong id="vientoActual"> -- km/h </strong>
+              </div>
+            </div>
+
+            <div class="dato">
+              <!-- <span class="icono">🥶</span> -->
+              <canvas id="dotlottie-canvas-actual" class="imgSens"></canvas>
+
+              <div>
+                <span>Sensación</span>
+                <strong id="sensacionActual"> -- °C </strong>
+              </div>
+            </div>
+          </div>
+
+          <button id="btnUbicacion" class="btn secundario">
+            📍 Obtener condiciones actuales
+          </button>
+        </section>
+
+        <section class="tarjeta actual" id="tarjetaLocal">
+          <div class="titulo-seccion">
+            <div>
+              <h2>Condiciones locales</h2>
+
+              <p id="ubicacionLocal">Ubicación no determinada</p>
+            </div>
+
+            <span id="estadoConexion" class="estado"> ● </span>
+          </div>
+
+          <div class="datos-actuales">
+            <div class="dato">
+              <!-- <span class="icono" id="iconoLocal">🌡️ </span> -->
+              <img src="images/thermometer-sun.svg" class="imgTermo" />
+              <!-- <img
+                src="https://cdn.meteocons.com/3.0.0-next.10/svg/fill/thermometer.svg"
+              /> -->
+
+              <div>
+                <span>Temperatura</span>
+                <strong id="tempActualLocal"> -- °C </strong>
+              </div>
+            </div>
+
+            <div class="dato">
+              <!-- <span class="icono">💨</span> -->
+              <canvas id="dotlottie-canvas-wind" class="imgWind"> </canvas>
+
+              <div>
+                <span>Viento</span>
+                <strong id="vientoActualLocal"> -- km/h </strong>
+              </div>
+            </div>
+
+            <div class="dato">
+              <!-- <span class="icono">🥶</span> -->
+              <!-- <img src="images/wind.svg" class="imgSens" /> -->
+              <canvas id="dotlottie-canvas-local" class="imgSens"></canvas>
+
+              <div>
+                <span>Sensación</span>
+                <strong id="sensacionActualLocal"> -- °C </strong>
+              </div>
+            </div>
+          </div>
+
+          <button id="btnUbicacionLocal" class="btn secundario">
+            📍 Obtener condiciones locales
+          </button>
+        </section>
+      </div>
+
+      <!-- INFORMACIÓN -->
+
+      <section class="tarjeta informacion">
+        <h2>Información</h2>
+
+        <p>
+          La sensación térmica por viento representa cómo se percibe la
+          temperatura sobre el cuerpo humano cuando existe circulación de aire.
+        </p>
+
+        <p>
+          La velocidad del viento aumenta la pérdida de calor corporal y puede
+          hacer que una temperatura de varios grados sobre cero se perciba
+          considerablemente más fría.
+        </p>
+      </section>
+
+      <footer>
+        <p>Calculadora de sensación térmica</p>
+
+        <p>
+          Datos meteorológicos:
+          <a href="https://open-meteo.com/" target="_blank" rel="noopener">
+            Open-Meteo
+          </a>
+        </p>
+      </footer>
+    </main>
+
+    <script type="module" src="js/app.js"></script>
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.13.0/lottie.min.js"
+      type="text/javascript"
+    ></script> -->
+  </body>
+</html>

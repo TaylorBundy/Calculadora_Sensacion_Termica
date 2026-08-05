@@ -1,0 +1,403 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+
+  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+
+  min-height: 100vh;
+
+  color: #222;
+
+  padding: 20px;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: 650px;
+
+  margin: auto;
+}
+
+.tituloContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 40px;
+}
+
+/* CABECERA */
+
+.cabecera {
+  color: white;
+
+  text-align: center;
+
+  margin-bottom: 25px;
+}
+
+.cabecera h1 {
+  font-size: 32px;
+
+  margin-bottom: 10px;
+}
+
+.cabecera p {
+  opacity: 0.85;
+
+  line-height: 1.5;
+}
+
+/* RESULTADO */
+
+.resultado {
+  background: rgba(255, 255, 255, 0.95);
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  text-align: center;
+
+  margin-bottom: 20px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.resultado-titulo {
+  display: block;
+
+  font-size: 18px;
+
+  color: #555;
+
+  margin-bottom: 10px;
+}
+
+.temperatura {
+  font-size: 60px;
+
+  font-weight: bold;
+
+  color: #1769aa;
+
+  margin-bottom: 10px;
+}
+
+.descripcion {
+  font-size: 18px;
+
+  color: #555;
+}
+
+/* TARJETAS */
+
+.tarjeta {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 25px;
+
+  margin-bottom: 20px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+}
+
+.tarjetaContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.tarjeta h2 {
+  margin-bottom: 20px;
+
+  font-size: 21px;
+}
+
+/* FORMULARIO */
+
+.formulario {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-weight: bold;
+
+  color: #444;
+}
+
+.input-unidad {
+  display: flex;
+
+  align-items: center;
+
+  border: 1px solid #ccc;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  background: #fafafa;
+}
+
+.input-unidad input {
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  padding: 13px;
+
+  font-size: 17px;
+
+  background: transparent;
+}
+
+.input-unidad span {
+  padding-right: 12px;
+
+  color: #666;
+
+  font-weight: bold;
+
+  white-space: nowrap;
+}
+
+/* BOTONES */
+
+.btn {
+  width: 100%;
+
+  border: none;
+
+  border-radius: 10px;
+
+  padding: 14px;
+
+  font-size: 17px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+
+  opacity: 0.9;
+}
+
+.principal {
+  background: #1769aa;
+
+  color: white;
+}
+
+.secundario {
+  background: #e8f1f8;
+
+  color: #1769aa;
+}
+
+/* ACTUAL */
+
+.titulo-seccion {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+}
+
+.titulo-seccion h2 {
+  margin-bottom: 5px;
+}
+
+#ubicacion,
+#ubicacionLocal {
+  color: #777;
+
+  font-size: 14px;
+}
+
+.estado {
+  color: #999;
+
+  font-size: 22px;
+}
+
+.datos-actuales {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 10px;
+
+  margin: 20px 0;
+}
+
+.dato {
+  background: #f5f7f9;
+
+  border-radius: 12px;
+
+  /* padding: 15px; */
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.dato .icono {
+  font-size: 25px;
+}
+
+.imgTermo,
+.imgSens {
+  /* height: 70px; */
+  width: 30%;
+}
+.imgWind {
+  height: clamp(10%, 18vw, 100%);
+  object-fit: cover;
+  width: 30%;
+}
+
+.dato div {
+  width: 70%;
+}
+
+/* #iconoActual,
+#iconoLocal {
+  background: url("https://cdn.meteocons.com/3.0.0-next.10/svg/fill/thermometer.svg")
+    no-repeat center/contain;
+} */
+
+.dato span {
+  display: block;
+
+  color: #777;
+
+  font-size: 13px;
+
+  margin-bottom: 5px;
+}
+
+.dato strong {
+  font-size: 18px;
+
+  color: #222;
+}
+
+/* INFORMACION */
+
+.informacion p {
+  line-height: 1.6;
+
+  color: #555;
+
+  margin-bottom: 12px;
+}
+
+/* FOOTER */
+
+footer {
+  text-align: center;
+
+  color: white;
+
+  opacity: 0.8;
+
+  font-size: 13px;
+
+  padding: 10px;
+}
+
+footer p {
+  margin-bottom: 5px;
+}
+
+footer a {
+  color: white;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+  .cabecera {
+    margin-bottom: 5px;
+  }
+  .cabecera h1 {
+    font-size: 27px;
+  }
+
+  .resultado {
+    /* padding: 25px 15px; */
+    padding: 10px;
+    margin-bottom: 5px;
+  }
+  .tarjeta {
+    margin-bottom: 5px;
+  }
+  .temperatura {
+    font-size: 50px;
+  }
+
+  .formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .datos-actuales {
+    grid-template-columns: 1fr;
+    margin: 5px 0;
+  }
+  .btn {
+    padding: 10px;
+  }
+  .dato {
+    /* padding: 10px; */
+    height: 63px;
+    width: 100%;
+  }
+  .dato div {
+    width: 100%;
+  }
+  .dato .imgWind {
+    height: unset;
+  }
+  .imgTermo,
+  .imgWind {
+    width: 10%;
+    height: 100%;
+    /* padding: 10px; */
+    /* margin: 0; */
+    object-fit: cover;
+    box-sizing: border-box;
+  }
+  .tarjeta h2 {
+    margin: 5px 0;
+  }
+}

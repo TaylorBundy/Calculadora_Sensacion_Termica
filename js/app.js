@@ -533,6 +533,7 @@ function mostrarResultado(temperatura, viento) {
   });
 
   descripcion.textContent = lade.descripcion; //obtenerDescripcion(resultado, origenUbicacion);
+  document.querySelector(`#dotlottie-canvas-resultado`).style.display = "unset";
 
   return resultado;
 }
@@ -578,6 +579,7 @@ function mostrarResultadoManual(temperatura, viento) {
   });
 
   descripcion.textContent = lade.descripcion; //obtenerDescripcion(resultado, origenUbicacion);
+  document.querySelector(`#dotlottie-canvas-resultado`).style.display = "unset";
 
   return resultado;
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <link rel="shortcut icon" id="favicon" href="images/invierno.avif" />
     <title>Calculadora de Sensación Térmica</title>
 
     <link rel="stylesheet" href="css/estilos.css" />
@@ -35,7 +35,11 @@
         <div id="sensacionTermica" class="temperatura">-- °C</div>
 
         <div class="conta">
-          <canvas id="dotlottie-canvas-resultado" class="imgSens"></canvas>
+          <canvas
+            id="dotlottie-canvas-resultado"
+            class="imgSens"
+            style="display: none"
+          ></canvas>
           <div id="descripcion" class="descripcion">
             Ingresá los datos para comenzar
           </div>
@@ -129,12 +133,14 @@
             </div>
           </div>
 
-          <button id="btnUbicacion" class="btn secundario">
-            📍 Obtener condiciones actuales
-          </button>
-          <button id="btnUbicacionCoordenadas" class="btn secundario">
-            📍 Obtener condiciones por coordenadas
-          </button>
+          <div class="btnContenedor">
+            <button id="btnUbicacion" class="btn secundario">
+              📍 Obtener condiciones actuales
+            </button>
+            <button id="btnUbicacionCoordenadas" class="btn secundario">
+              📍 Obtener condiciones por coordenadas
+            </button>
+          </div>
         </section>
 
         <section class="tarjeta actual" id="tarjetaLocal">

@@ -180,6 +180,10 @@ body {
 }
 
 /* BOTONES */
+.btnContenedor {
+  display: flex;
+  gap: 5px;
+}
 
 .btn {
   width: 100%;
@@ -492,6 +496,10 @@ footer a {
   .datos-actuales {
     grid-template-columns: 1fr;
     margin: 5px 0;
+  }
+  .btnContenedor {
+    flex-direction: column;
+    gap: 5px;
   }
   .btn {
     padding: 10px;

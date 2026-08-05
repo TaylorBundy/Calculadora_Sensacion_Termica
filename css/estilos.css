@@ -259,8 +259,6 @@ body {
 
   border-radius: 12px;
 
-  /* padding: 15px; */
-
   display: flex;
 
   align-items: center;
@@ -274,7 +272,6 @@ body {
 
 .imgTermo,
 .imgSens {
-  /* height: 70px; */
   width: 30%;
 }
 .imgWind {
@@ -286,12 +283,6 @@ body {
 .dato div {
   width: 70%;
 }
-
-/* #iconoActual,
-#iconoLocal {
-  background: url("https://cdn.meteocons.com/3.0.0-next.10/svg/fill/thermometer.svg")
-    no-repeat center/contain;
-} */
 
 .dato span {
   display: block;
@@ -341,6 +332,131 @@ footer a {
   color: white;
 }
 
+.modal-coordenadas {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+
+  z-index: 9999;
+}
+
+.modal-coordenadas.mostrar {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-contenido {
+  position: relative;
+
+  width: min(90%, 380px);
+
+  padding: 25px;
+
+  background: #fff;
+  border-radius: 14px;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+  transform: translateY(10px);
+  transition: transform 0.2s ease;
+}
+
+.modal-coordenadas.mostrar .modal-contenido {
+  transform: translateY(0);
+}
+
+.modal-contenido h2 {
+  margin: 0 0 8px;
+  font-size: 1.4rem;
+}
+
+.modal-contenido p {
+  margin: 0 0 20px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.modal-cerrar {
+  position: absolute;
+
+  top: 10px;
+  right: 12px;
+
+  border: none;
+  background: transparent;
+
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  color: #777;
+}
+
+.modal-cerrar:hover {
+  color: #000;
+}
+
+.campo {
+  margin-bottom: 15px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.campo input {
+  box-sizing: border-box;
+
+  width: 100%;
+  padding: 10px 12px;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  font-size: 1rem;
+  outline: none;
+}
+
+.campo input:focus {
+  border-color: #555;
+}
+
+.btn-obtener {
+  width: 100%;
+
+  padding: 11px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #222;
+  color: white;
+
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn-obtener:hover {
+  background: #000;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 600px) {
@@ -355,15 +471,18 @@ footer a {
   }
 
   .resultado {
-    /* padding: 25px 15px; */
     padding: 10px;
     margin-bottom: 5px;
+  }
+  .resultado-titulo {
+    margin: 0;
   }
   .tarjeta {
     margin-bottom: 5px;
   }
   .temperatura {
     font-size: 50px;
+    margin: 0;
   }
 
   .formulario {
@@ -378,24 +497,28 @@ footer a {
     padding: 10px;
   }
   .dato {
-    /* padding: 10px; */
     height: 63px;
     width: 100%;
   }
   .dato div {
     width: 100%;
   }
-  .dato .imgWind {
-    height: unset;
-  }
   .imgTermo,
-  .imgWind {
-    width: 10%;
+  .imgWind,
+  .imgSens {
+    width: 20%;
     height: 100%;
-    /* padding: 10px; */
-    /* margin: 0; */
     object-fit: cover;
     box-sizing: border-box;
+  }
+  #dotlottie-canvas-resultado {
+    width: 20%;
+  }
+  .conta {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
   }
   .tarjeta h2 {
     margin: 5px 0;

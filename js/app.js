@@ -26,6 +26,9 @@ const vientoInput = document.getElementById("viento");
 const btnCalcular = document.getElementById("btnCalcular");
 const btnUbicacion = document.getElementById("btnUbicacion");
 const btnUbicacionLocal = document.getElementById("btnUbicacionLocal");
+const btnUbicacionCoordenadas = document.querySelector(
+  "#btnUbicacionCoordenadas",
+);
 const sensacionTermica = document.getElementById("sensacionTermica");
 const descripcion = document.getElementById("descripcion");
 const tempActual = document.getElementById("tempActual");
@@ -44,6 +47,7 @@ const iconoViento = document.querySelectorAll(".imgWind");
 const iconoSensacion = document.querySelectorAll(".imgSens");
 
 let origen = null;
+let origenUbicacion;
 let data = null;
 let resp = null;
 let localidad = null;
@@ -55,6 +59,7 @@ let horas = null;
 let selector = null;
 let source = null;
 let dia;
+let tempFormateada;
 
 const imgs = {
   termometro:
@@ -124,13 +129,6 @@ async function obtenerSol(latitud, longitud) {
 
     const amanecer = datos.daily.sunrise[0];
     const puestaSol = datos.daily.sunset[0];
-    // const amanecer2 = new Date(datos.daily.sunrise[0]);
-    // const puestaSol2 = new Date(datos.daily.sunset[0]);
-    // console.log(formatearHora(amanecer2));
-    // dia = esDeDia(amanecer2, puestaSol2);
-    // console.log(dia);
-    // const deDia = esDeDia(amanecer, puestaSol);
-    // console.log(deDia ? "🌞 Día" : "🌙 Noche");
 
     return {
       amanecer: formatearHora(amanecer),
@@ -152,8 +150,6 @@ async function obtenerSol(latitud, longitud) {
 
 function esDeDia(amanecer, puestaSol, ahora = new Date()) {
   const minutos = (fecha) => fecha.getHours() * 60 + fecha.getMinutes();
-  //console.log(minutos(ahora));
-  //console.log(minutos(amanecer));
 
   return (
     minutos(ahora) >= minutos(amanecer) && minutos(ahora) < minutos(puestaSol)
@@ -171,11 +167,8 @@ function formatearHora(fechaHora) {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
-  //   tarjetaActual.style.display = "none";
-  //   tarjetaLocal.style.display = "none";
   const date = new Date();
   horas = date.toLocaleString("es-ES", { hour: "numeric", hour24: true });
-  //console.log(horas);
   try {
     const location = await getLocationWithAddress();
     //console.log(location);
@@ -192,8 +185,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
     const datosSol = await obtenerSol(location.latitude, location.longitude);
 
-    //console.log("Amanecer:", datosSol.amanecer);
-    //console.log("Puesta del sol:", datosSol.puestaSol);
     const amanecer = new Date(datosSol.amanecer2);
     const puestaSol = new Date(datosSol.puestaSol2);
 
@@ -202,22 +193,11 @@ window.addEventListener("DOMContentLoaded", async () => {
       iconoTermometro.forEach((item) => {
         item.src = imgs.termometroDia;
       });
-      //iconoTermometro.src = imgs.termometroDia;
     } else {
-      //iconoTermometro.src = imgs.termometroNoche;
       iconoTermometro.forEach((item) => {
         item.src = imgs.termometroNoche;
       });
     }
-    // iconoViento.forEach((item) => {
-    //   item.src = imgs.viento3;
-    // });
-    // const dotLottie = new DotLottie({
-    //   autoplay: true,
-    //   loop: true,
-    //   canvas: document.querySelectorAll(`#dotlottie-canvas-wind`),
-    //   src: `${imgs.viento3}`, // replace with your .lottie or .json file URL
-    // });
     const canvasWind = document.querySelectorAll("#dotlottie-canvas-wind");
 
     canvasWind.forEach((canvas) => {
@@ -229,7 +209,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       });
     });
 
-    console.log(deDia);
+    //console.log(deDia);
   } catch (err) {
     console.error(err.message);
   }
@@ -398,43 +378,94 @@ function calcularSensacionTermica(temperatura, viento) {
 // DESCRIPCIÓN
 // -------------------------------------------------------
 
+// function obtenerDescripcion2(temperatura, origen) {
+//   console.log(temperatura);
+//   if (origen === "local") {
+//     selector = "#dotlottie-canvas-local";
+//   } else {
+//     selector = "#dotlottie-canvas-actual";
+//   }
+//   if (temperatura >= 15) {
+//     return "Sensación agradable";
+//   }
+
+//   if (temperatura >= 10) {
+//     return "Fresco";
+//   }
+
+//   if (temperatura > 5 && temperatura <= 10) {
+//     return "Frío";
+//   }
+
+//   if (temperatura >= 0 && temperatura <= 5) {
+//     return "Frío intenso";
+//   }
+
+//   if (temperatura >= -10) {
+//     return "Muy frío";
+//   }
+
+//   if (temperatura >= -20) {
+//     return "Frío extremo";
+//   }
+
+//   return "Frío peligroso";
+// }
+
 function obtenerDescripcion(temperatura, origen) {
   if (origen === "local") {
     selector = "#dotlottie-canvas-local";
+  } else if (origen === "resultado") {
+    selector = "#dotlottie-canvas-resultado";
   } else {
     selector = "#dotlottie-canvas-actual";
   }
+
   if (temperatura >= 15) {
-    return "Sensación agradable";
-  }
-
-  if (temperatura >= 10) {
-    return "Fresco";
-  }
-
-  if (temperatura >= 5) {
-    // iconoSensacion.forEach((item) => {
-    //   item.src = imgs.frio;
-    // });
-    return "Frío";
+    return {
+      descripcion: "Caluroso",
+      nivel: 1,
+      selector: selector,
+    };
   }
 
   if (temperatura >= 0) {
-    // iconoSensacion.forEach((item) => {
-    //   item.src = imgs.frio;
-    // });
-    return "Frío intenso";
+    return {
+      descripcion: "Cómodo o fresco",
+      nivel: 1,
+      selector: selector,
+    };
   }
 
   if (temperatura >= -10) {
-    return "Muy frío";
+    return {
+      descripcion: "Frío moderado",
+      nivel: 2,
+      selector: selector,
+    };
   }
 
-  if (temperatura >= -20) {
-    return "Frío extremo";
+  if (temperatura >= -25) {
+    return {
+      descripcion: "Muy frío",
+      nivel: 3,
+      selector: selector,
+    };
   }
 
-  return "Frío peligroso";
+  if (temperatura >= -45) {
+    return {
+      descripcion: "Frío peligroso",
+      nivel: 4,
+      selector: selector,
+    };
+  }
+
+  return {
+    descripcion: "Frío extremo",
+    nivel: 5,
+    selector: selector,
+  };
 }
 
 // -------------------------------------------------------
@@ -443,21 +474,28 @@ function obtenerDescripcion(temperatura, origen) {
 
 function mostrarResultado(temperatura, viento) {
   const resultado = calcularSensacionTermica(temperatura, viento);
-  if (btnUbicacion.classList.contains("presionado")) {
+  if (
+    btnUbicacion.classList.contains("presionado") ||
+    btnUbicacionCoordenadas.classList.contains("presionado")
+  ) {
     sensacionTermica.textContent = `${resultado.toFixed(1)} °C`;
+    tempFormateada = resultado;
   } else {
     const tempCsensacion = (resultado - 32) / 1.8;
+    tempFormateada = (resultado - 32) / 1.8;
     if (localidad.includes("Aluminé") || localidad.includes("Villa Pehuenia")) {
       sensacionTermica.textContent = `${tempCsensacion.toFixed(1)} °C`;
+      tempFormateada = (resultado - 32) / 1.8;
     } else {
       sensacionTermica.textContent = `${resultado.toFixed(1)} °C`;
+      tempFormateada = resultado;
     }
   }
-  //origen = "actual";
-  const lade = obtenerDescripcion(resultado, origen);
+  const lade = obtenerDescripcion(tempFormateada, origenUbicacion);
   //console.log(lade.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+  //console.log(lade);
   if (
-    lade
+    lade.descripcion
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
@@ -465,14 +503,71 @@ function mostrarResultado(temperatura, viento) {
   ) {
     source = `${imgs.frio}`;
   } else if (
-    lade
+    lade.descripcion
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
-      .includes("agradable")
+      .includes("comodo")
   ) {
     source = `${imgs.agradable}`;
-  } else {
+  } else if (
+    lade.descripcion
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .includes("caluroso")
+  ) {
+    source = `${imgs.calor}`;
+  }
+  const dotLottie = new DotLottie({
+    autoplay: true,
+    loop: true,
+    canvas: document.querySelector(`${selector}`),
+    src: `${source}`, // replace with your .lottie or .json file URL
+  });
+  const dotLottie2 = new DotLottie({
+    autoplay: true,
+    loop: true,
+    canvas: document.querySelector(`#dotlottie-canvas-resultado`),
+    src: `${source}`, // replace with your .lottie or .json file URL
+  });
+
+  descripcion.textContent = lade.descripcion; //obtenerDescripcion(resultado, origenUbicacion);
+
+  return resultado;
+}
+
+function mostrarResultadoManual(temperatura, viento) {
+  const resultado = calcularSensacionTermica(temperatura, viento);
+
+  sensacionTermica.textContent = `${resultado.toFixed(1)} °C`;
+  //}
+  origenUbicacion = "resultado";
+  const lade = obtenerDescripcion(resultado, origenUbicacion);
+  //console.log(lade);
+  if (
+    lade.descripcion
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .includes("frio")
+  ) {
+    source = `${imgs.frio}`;
+  } else if (
+    lade.descripcion
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .includes("comodo")
+  ) {
+    source = `${imgs.agradable}`;
+  } else if (
+    lade.descripcion
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .includes("caluroso")
+  ) {
     source = `${imgs.calor}`;
   }
   const dotLottie = new DotLottie({
@@ -482,22 +577,7 @@ function mostrarResultado(temperatura, viento) {
     src: `${source}`, // replace with your .lottie or .json file URL
   });
 
-  descripcion.textContent = obtenerDescripcion(resultado, origen);
-
-  return resultado;
-}
-
-function mostrarResultadoManual(temperatura, viento) {
-  const resultado = calcularSensacionTermica(temperatura, viento);
-  //   const tempCsensacion = (resultado - 32) / 1.8;
-  //   if (localidad.includes("Aluminé")) {
-  //     sensacionTermica.textContent = `${tempCsensacion.toFixed(1)} °C`;
-  //   } else {
-  sensacionTermica.textContent = `${resultado.toFixed(1)} °C`;
-  //}
-  origen = "local";
-
-  descripcion.textContent = obtenerDescripcion(resultado, origen);
+  descripcion.textContent = lade.descripcion; //obtenerDescripcion(resultado, origenUbicacion);
 
   return resultado;
 }
@@ -563,14 +643,6 @@ function obtenerUbicacion() {
       maximumAge: 300000,
     },
   );
-  //   (async () => {
-  //     const address = await reverseGeocode(latitud, longitud, "es");
-  //     console.log(address);
-  //     localidad = address.localidad.replace("Departamento", "");
-  //     provincia = address.provincia;
-  //     pais = address.pais;
-  //     resultadoTitulo.textContent = ` Sensación térmica ${localidad}, ${provincia} - ${pais}`;
-  //   })();
 }
 
 async function obtenerUbicacionLocal() {
@@ -592,17 +664,11 @@ async function obtenerUbicacionLocal() {
   const temperatura = data.observations[0].imperial.temp;
   const viento = data.observations[0].imperial.windSpeed;
   const tempC = (temperatura - 32) / 1.8;
-  origen = "local";
+  origenUbicacion = "local";
   const resultado = mostrarResultado(temperatura, viento);
   const tempCsensacion = (resultado - 32) / 1.8;
   latitud = data.observations[0].lat;
   longitud = data.observations[0].lon;
-  //   ubicacionLocal.textContent =
-  //     data.observations[0].neighborhood +
-  //     " · " +
-  //     latitud.toFixed(4) +
-  //     ", " +
-  //     longitud.toFixed(4);
 
   sensacionActualLocal.textContent = `${tempCsensacion.toFixed(1)} °C`;
   tempActualLocal.textContent = `${tempC.toFixed(1)} °C`;
@@ -666,7 +732,7 @@ async function obtenerClima(latitud, longitud) {
     tempActual.textContent = `${temperatura.toFixed(1)} °C`;
 
     vientoActual.textContent = `${viento.toFixed(1)} km/h`;
-    origen = "actual";
+    origenUbicacion = "actual";
 
     const resultado = mostrarResultado(temperatura, viento);
 
@@ -694,11 +760,132 @@ async function obtenerClima(latitud, longitud) {
   }
 }
 
+function crearModalCoordenadas() {
+  // Evitar crear el modal más de una vez
+  if (document.querySelector("#modalCoordenadas")) {
+    document.querySelector("#modalCoordenadas").classList.add("mostrar");
+    return;
+  }
+
+  const modal = document.createElement("div");
+
+  modal.id = "modalCoordenadas";
+  modal.className = "modal-coordenadas";
+
+  modal.innerHTML = `
+    <div class="modal-contenido">
+
+      <button class="modal-cerrar" id="cerrarModalCoordenadas">
+        &times;
+      </button>
+
+      <h2>Ingresar coordenadas</h2>
+
+      <p>Ingresá la ubicación para obtener la temperatura.</p>
+
+      <div class="campo">
+        <label for="latitud">Latitud</label>
+        <input
+          type="number"
+          id="latitud"
+          placeholder="-38.9000"
+          step="any"
+        >
+      </div>
+
+      <div class="campo">
+        <label for="longitud">Longitud</label>
+        <input
+          type="number"
+          id="longitud"
+          placeholder="-71.0500"
+          step="any"
+        >
+      </div>
+
+      <button id="btnObtenerTemperatura" class="btn-obtener">
+        Obtener temperatura
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Mostrar modal
+  requestAnimationFrame(() => {
+    modal.classList.add("mostrar");
+  });
+
+  // Cerrar
+  document
+    .querySelector("#cerrarModalCoordenadas")
+    .addEventListener("click", () => {
+      cerrarModalCoordenadas();
+    });
+
+  // Cerrar haciendo click fuera del contenido
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      cerrarModalCoordenadas();
+    }
+  });
+
+  // Botón obtener temperatura
+  document
+    .querySelector("#btnObtenerTemperatura")
+    .addEventListener("click", () => {
+      const latitud = parseFloat(document.querySelector("#latitud").value);
+
+      const longitud = parseFloat(document.querySelector("#longitud").value);
+
+      // Validar coordenadas
+      if (isNaN(latitud) || isNaN(longitud)) {
+        alert("Ingresá una latitud y longitud válidas.");
+        return;
+      }
+
+      if (latitud < -90 || latitud > 90) {
+        alert("La latitud debe estar entre -90 y 90.");
+        return;
+      }
+
+      if (longitud < -180 || longitud > 180) {
+        alert("La longitud debe estar entre -180 y 180.");
+        return;
+      }
+
+      // Acá llamamos a tu función para obtener la temperatura
+      obtenerClima(latitud, longitud);
+
+      cerrarModalCoordenadas();
+    });
+}
+
+function cerrarModalCoordenadas() {
+  const modal = document.querySelector("#modalCoordenadas");
+
+  if (!modal) return;
+
+  modal.classList.remove("mostrar");
+}
+
 // -------------------------------------------------------
 // EVENTOS
 // -------------------------------------------------------
 
-btnCalcular.addEventListener("click", calcularManual);
+btnUbicacionCoordenadas.addEventListener("click", () => {
+  btnUbicacionCoordenadas.classList.add("presionado");
+  crearModalCoordenadas();
+  limpiarCondicionesActuales("Actual");
+});
+
+btnCalcular.addEventListener("click", () => {
+  calcularManual();
+  limpiarCondicionesActuales("Actual");
+  limpiarCondicionesActuales("Local");
+  resultadoTitulo.textContent = ` Sensación térmica `;
+});
 
 //btnUbicacion.addEventListener("click", obtenerUbicacion);
 btnUbicacion.addEventListener("click", function (e) {
@@ -709,6 +896,9 @@ btnUbicacion.addEventListener("click", function (e) {
 btnUbicacionLocal.addEventListener("click", () => {
   if (btnUbicacion.className.includes("presionado")) {
     btnUbicacion.classList.remove("presionado");
+  }
+  if (btnUbicacionCoordenadas.className.includes("presionado")) {
+    btnUbicacionCoordenadas.classList.remove("presionado");
   }
   obtenerUbicacionLocal();
   limpiarCondicionesActuales("Local");
